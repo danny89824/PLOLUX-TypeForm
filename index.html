@@ -18,6 +18,7 @@
             opacity: 0;
             transform: translateY(20px);
             display: none;
+            width: 100%; 
         }
         .step-container.active {
             opacity: 1;
@@ -25,13 +26,22 @@
             display: block;
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
         }
-        /* 로딩 스피너 애니메이션 */
+        /* 에러 발생 시 흔들림 애니메이션 */
+        .shake {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        /* 로딩 스피너 */
         .spinner {
             border: 3px solid rgba(255,255,255,0.3);
             border-radius: 50%;
@@ -40,18 +50,15 @@
             height: 20px;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-    <div class="glass-card w-full max-w-2xl rounded-3xl overflow-hidden relative">
+    <div class="glass-card w-full max-w-2xl rounded-3xl overflow-hidden relative shadow-2xl">
         
-        <div class="h-1.5 bg-slate-100 w-full">
-            <div id="progressBar" class="h-full bg-indigo-600 transition-all duration-500 ease-out" style="width: 25%;"></div>
+        <div class="h-1.5 bg-slate-100 w-full relative">
+            <div id="progressBar" class="absolute top-0 left-0 h-full bg-indigo-600 transition-all duration-500 ease-out" style="width: 25%;"></div>
         </div>
         
         <div class="pt-8 px-8 sm:px-10 pb-0">
@@ -66,7 +73,7 @@
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="relative">
-                        <input type="radio" name="project_type" id="type_new" value="신규구축" class="peer hidden" checked>
+                        <input type="radio" name="project_type" id="type_new" value="신규구축" class="peer hidden" required>
                         <label for="type_new" class="flex flex-col items-center p-6 bg-white border-2 border-slate-100 rounded-2xl cursor-pointer transition-all hover:border-indigo-200 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/50 peer-checked:ring-4 peer-checked:ring-indigo-100 group">
                             <div class="w-14 h-14 rounded-full bg-slate-50 text-3xl flex items-center justify-center mb-4 transition-colors group-hover:bg-indigo-100 peer-checked:bg-indigo-100">✨</div>
                             <span class="font-bold text-slate-700 peer-checked:text-indigo-900">신규 구축</span>
@@ -91,7 +98,7 @@
 
                 <div class="space-y-3">
                     <div class="relative">
-                        <input type="radio" name="budget" id="budget_small" value="500만원 미만" class="peer hidden">
+                        <input type="radio" name="budget" id="budget_small" value="500만원 미만" class="peer hidden" required>
                         <label for="budget_small" class="flex items-center w-full p-4 bg-white border-2 border-slate-100 rounded-xl cursor-pointer transition-all hover:border-indigo-200 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/30 peer-checked:ring-2 peer-checked:ring-indigo-100">
                             <div class="w-5 h-5 rounded-full border-2 border-slate-300 mr-4 flex items-center justify-center peer-checked:border-indigo-600 peer-checked:bg-indigo-600">
                                 <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
@@ -100,5 +107,222 @@
                         </label>
                     </div>
                     <div class="relative">
-                        <input type="radio" name="budget" id="budget_medium" value="500~1500만원" class="peer hidden" checked>
-                        <label for="budget_medium" class="flex items-center w-full p-4 bg-white border-2 border-slate-100 rounded-xl cursor-pointer transition-all hover:border-indigo-200 peer-checked:border-indigo-
+                        <input type="radio" name="budget" id="budget_medium" value="500~1500만원" class="peer hidden">
+                        <label for="budget_medium" class="flex items-center w-full p-4 bg-white border-2 border-slate-100 rounded-xl cursor-pointer transition-all hover:border-indigo-200 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/30 peer-checked:ring-2 peer-checked:ring-indigo-100">
+                            <div class="w-5 h-5 rounded-full border-2 border-slate-300 mr-4 flex items-center justify-center peer-checked:border-indigo-600 peer-checked:bg-indigo-600">
+                                <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
+                            </div>
+                            <span class="font-medium text-slate-700 peer-checked:text-indigo-900">500만원 ~ 1,500만원 (Standard)</span>
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input type="radio" name="budget" id="budget_large" value="1500만원 이상" class="peer hidden">
+                        <label for="budget_large" class="flex items-center w-full p-4 bg-white border-2 border-slate-100 rounded-xl cursor-pointer transition-all hover:border-indigo-200 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/30 peer-checked:ring-2 peer-checked:ring-indigo-100">
+                            <div class="w-5 h-5 rounded-full border-2 border-slate-300 mr-4 flex items-center justify-center peer-checked:border-indigo-600 peer-checked:bg-indigo-600">
+                                <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
+                            </div>
+                            <span class="font-medium text-slate-700 peer-checked:text-indigo-900">1,500만원 이상 (Premium)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-container" data-step="3">
+                <span class="text-xs font-bold text-indigo-600 tracking-wider uppercase mb-3 block">Step 3 / 4</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-8">연락받으실 정보를<br>알려주세요.</h2>
+                
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">회사/브랜드명 <span class="text-indigo-500">*</span></label>
+                        <input type="text" name="company_name" required class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all text-slate-800 bg-white" placeholder="예: 주식회사 플로럭스">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">연락처 (이메일/전화번호) <span class="text-indigo-500">*</span></label>
+                        <input type="text" name="contact" required class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all text-slate-800 bg-white" placeholder="이메일 또는 전화번호를 남겨주세요">
+                    </div>
+                </div>
+            </div>
+
+             <div class="step-container" data-step="4">
+                <span class="text-xs font-bold text-indigo-600 tracking-wider uppercase mb-3 block">Step 4 / 4</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-4">거의 다 되었습니다!</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">
+                    작성해주신 내용을 바탕으로<br>담당자가 빠르게 검토 후 연락드리겠습니다.
+                </p>
+                 <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">추가 요청사항 (선택)</label>
+                    <textarea name="memo" rows="4" class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all text-slate-800 bg-white resize-none" placeholder="궁금한 점이나 특별히 신경 써야 할 부분이 있다면 적어주세요."></textarea>
+                </div>
+            </div>
+
+
+            <div class="mt-12 flex justify-between items-center pt-6 border-t border-slate-100/50">
+                <button type="button" id="prevBtn" class="px-6 py-3 rounded-xl text-slate-500 font-semibold hover:bg-slate-50 hover:text-slate-700 transition-all hidden">
+                    ← 이전
+                </button>
+                
+                <button type="button" id="nextBtn" class="ml-auto px-8 py-3.5 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-500/30 transition-all active:transform active:scale-95 flex items-center gap-2">
+                    <span>다음 단계</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        // ✅ Webhook URL
+        const WEBHOOK_URL = 'https://recommand.app.n8n.cloud/webhook-test/377684b2-0e45-45e8-b3ea-19390be60506';
+
+        let currentStep = 1;
+        const totalSteps = 4;
+        const form = document.getElementById('wizardForm');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const progressBar = document.getElementById('progressBar');
+        const stepContainers = document.querySelectorAll('.step-container');
+
+        // [시나리오 1] 초기화
+        updateUI();
+
+        // [시나리오 2] 버튼 클릭 핸들러
+        nextBtn.addEventListener('click', handleNext);
+        prevBtn.addEventListener('click', handlePrev);
+        
+        // [시나리오 3] Enter키로 다음 이동 (Textarea 제외)
+        form.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault(); // 폼 기본 제출 방지
+                handleNext();
+            }
+        });
+
+        // ❌ [삭제됨] 라디오 버튼 자동 넘김 기능 제거
+
+        function handleNext() {
+            if (currentStep < totalSteps) {
+                // 유효성 검사 실패 시 중단
+                if (!validateStep(currentStep)) return;
+                
+                currentStep++;
+                updateUI();
+            } else {
+                // 마지막 단계면 제출
+                submitForm();
+            }
+        }
+
+        function handlePrev() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+            }
+        }
+
+        // 유효성 검사
+        function validateStep(step) {
+            const stepEl = document.querySelector(`.step-container[data-step="${step}"]`);
+            
+            // 1. 필수 라디오 버튼 그룹 검사
+            const radioGroups = new Set();
+            stepEl.querySelectorAll('input[type="radio"][required]').forEach(r => radioGroups.add(r.name));
+            
+            for (const groupName of radioGroups) {
+                const group = stepEl.querySelectorAll(`input[name="${groupName}"]`);
+                const isChecked = [...group].some(radio => radio.checked);
+                if (!isChecked) {
+                    triggerShake(stepEl);
+                    alert('항목을 선택해주세요.');
+                    return false;
+                }
+            }
+
+            // 2. 필수 텍스트 인풋 검사
+            const textInputs = stepEl.querySelectorAll('input[type="text"][required], select[required]');
+            let isTextValid = true;
+
+            textInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isTextValid = false;
+                    input.classList.add('border-red-500', 'ring-2', 'ring-red-500/20');
+                    input.addEventListener('input', () => {
+                        input.classList.remove('border-red-500', 'ring-2', 'ring-red-500/20');
+                    }, { once: true });
+                }
+            });
+
+            if (!isTextValid) {
+                triggerShake(stepEl);
+                return false;
+            }
+
+            return true;
+        }
+
+        // 에러 시 흔들림 효과
+        function triggerShake(element) {
+            element.classList.remove('shake');
+            void element.offsetWidth; 
+            element.classList.add('shake');
+        }
+
+        function updateUI() {
+            // 단계 표시
+            stepContainers.forEach(step => {
+                const stepNum = parseInt(step.dataset.step);
+                if (stepNum === currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+
+            // 프로그레스 바
+            const progress = (currentStep / totalSteps) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // 버튼 상태
+            prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+            
+            if (currentStep === totalSteps) {
+                nextBtn.innerHTML = '<span>제출하기</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>';
+            } else {
+                nextBtn.innerHTML = '<span>다음 단계</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>';
+            }
+        }
+
+        // 폼 제출
+        async function submitForm() {
+            nextBtn.disabled = true;
+            const originalContent = nextBtn.innerHTML;
+            nextBtn.innerHTML = '<div class="spinner"></div><span class="ml-2">전송 중...</span>';
+            nextBtn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                if (response.ok) {
+                    alert('✅ 의뢰가 성공적으로 접수되었습니다. 곧 연락드리겠습니다!');
+                    location.reload(); 
+                } else {
+                    throw new Error('Server returned ' + response.status);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ 전송에 실패했습니다. (n8n Webhook Test 모드인지 확인해주세요)');
+            } finally {
+                nextBtn.disabled = false;
+                nextBtn.innerHTML = originalContent;
+                nextBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+    </script>
+</body>
+</html>
