@@ -3,123 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프로젝트 의뢰 상담 | Agency Name</title>
+    <title>프로젝트 의뢰 | 웹 에이전시</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
-        .form-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* 트렌디한 메시 그라데이션 배경 */
+            background: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%), 
+                        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%), 
+                        #F8FAFC;
+        }
+        /* 부드러운 단계 전환 애니메이션 */
+        .step-container {
+            transition: all 0.4s ease-in-out;
+            opacity: 0;
+            transform: translateY(20px);
+            display: none; /* 기본적으로 숨김 */
+        }
+        .step-container.active {
+            opacity: 1;
+            transform: translateY(0);
+            display: block; /* 활성 단계만 표시 */
+        }
+        /* Glassmorphism 카드 효과 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        /* 선택된 라디오 카드 스타일 */
+        input[type="radio"]:checked +label {
+            @apply ring-2 ring-indigo-500 bg-indigo-50 text-indigo-900;
+        }
     </style>
 </head>
-<body class="py-12 px-4">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <div class="max-w-3xl mx-auto">
-        <div class="text-center mb-12">
-            <h1 class="text-3xl font-bold text-slate-900 mb-2">Agency Name</h1>
-            <p class="text-slate-600">성공적인 비즈니스를 위한 첫 걸음, 프로젝트 의뢰를 통해 성장의 발판을 마련하세요.</p>
+    <div class="glass-card w-full max-w-2xl rounded-3xl shadow-xl overflow-hidden relative">
+        
+        <div class="h-2 bg-slate-100 relative">
+            <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500" style="width: 0%;"></div>
+        </div>
+        
+        <div class="pt-8 px-10 pb-0">
+            <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">Agency.Logo</span>
         </div>
 
-        <form id="consultationForm" class="space-y-8">
+        <form id="wizardForm" class="p-10 pt-6">
             
-            <div class="form-card p-8">
-                <h2 class="text-xl font-semibold text-indigo-600 mb-6 border-b pb-2">01. 기본 정보</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">회사명/브랜드명</label>
-                        <input type="text" name="company_name" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            <div class="step-container active" data-step="1">
+                <span class="text-sm font-medium text-indigo-600 mb-2 block">Step 1/4</span>
+                <h2 class="text-3xl font-bold text-slate-900 mb-6 leading-tight">어떤 프로젝트를<br>계획하고 계신가요?</h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="relative">
+                        <input type="radio" name="project_type" id="type_new" value="신규구축" class="peer hidden" checked>
+                        <label for="type_new" class="flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer transition-all hover:shadow-md hover:border-indigo-300">
+                            <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-4">✨</div>
+                            <span class="font-medium text-slate-700">신규 웹사이트 구축</span>
+                        </label>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">담당자 성함</label>
-                        <input type="text" name="manager_name" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <div class="relative">
+                        <input type="radio" name="project_type" id="type_renewal" value="리뉴얼" class="peer hidden">
+                        <label for="type_renewal" class="flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer transition-all hover:shadow-md hover:border-indigo-300">
+                            <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-4">🔄</div>
+                            <span class="font-medium text-slate-700">기존 사이트 리뉴얼</span>
+                        </label>
                     </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-slate-700 mb-1">연락처 (이메일 또는 전화번호)</label>
-                        <input type="text" name="contact" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+            </div>
+
+            <div class="step-container" data-step="2">
+                <span class="text-sm font-medium text-indigo-600 mb-2 block">Step 2/4</span>
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">생각하시는 예산 범위는<br>어떻게 되시나요?</h2>
+                <p class="text-slate-500 mb-6">대략적인 범위를 알려주시면 맞춤 제안을 드립니다.</p>
+
+                <div class="space-y-3">
+                    <div class="relative">
+                        <input type="radio" name="budget" id="budget_small" value="500만원 미만" class="peer hidden">
+                        <label for="budget_small" class="block w-full p-4 bg-white border border-slate-200 rounded-xl cursor-pointer transition-all hover:border-indigo-300 font-medium text-center text-slate-700">
+                            500만원 미만 (Basic)
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input type="radio" name="budget" id="budget_medium" value="500~1500만원" class="peer hidden" checked>
+                        <label for="budget_medium" class="block w-full p-4 bg-white border border-slate-200 rounded-xl cursor-pointer transition-all hover:border-indigo-300 font-medium text-center text-slate-700">
+                            500만원 ~ 1,500만원 (Standard)
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input type="radio" name="budget" id="budget_large" value="1500만원 이상" class="peer hidden">
+                        <label for="budget_large" class="block w-full p-4 bg-white border border-slate-200 rounded-xl cursor-pointer transition-all hover:border-indigo-300 font-medium text-center text-slate-700">
+                            1,500만원 이상 (Premium)
+                        </label>
                     </div>
                 </div>
             </div>
 
-            <div class="form-card p-8">
-                <h2 class="text-xl font-semibold text-indigo-600 mb-6 border-b pb-2">02. 프로젝트 성격</h2>
-                <div class="space-y-4">
+            <div class="step-container" data-step="3">
+                <span class="text-sm font-medium text-indigo-600 mb-2 block">Step 3/4</span>
+                <h2 class="text-3xl font-bold text-slate-900 mb-6">연락받으실 정보를<br>알려주세요.</h2>
+                
+                <div class="space-y-6">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">프로젝트 유형</label>
-                        <div class="flex gap-4">
-                            <label class="inline-flex items-center"><input type="radio" name="project_type" value="신규구축" class="text-indigo-600"> <span class="ml-2">신규구축</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="project_type" value="리뉴얼" class="text-indigo-600"> <span class="ml-2">리뉴얼</span></label>
-                        </div>
+                        <label for="company" class="block text-sm font-medium text-slate-700 mb-1">회사/브랜드명</label>
+                        <input type="text" id="company" name="company_name" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all bg-white/50" placeholder="예: 주식회사 멋진웹">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">주요 목적</label>
-                        <select name="purpose" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                            <option value="brand">브랜드 홍보</option>
-                            <option value="commerce">상품 판매 (커머스)</option>
-                            <option value="landing">고객 문의 확보 (랜딩페이지)</option>
-                        </select>
+                        <label for="contact_info" class="block text-sm font-medium text-slate-700 mb-1">이메일 또는 전화번호</label>
+                        <input type="text" id="contact_info" name="contact" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all bg-white/50" placeholder="example@email.com">
                     </div>
                 </div>
             </div>
 
-            <div class="form-card p-8">
-                <h2 class="text-xl font-semibold text-indigo-600 mb-6 border-b pb-2">03. 기술 및 일정</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">희망 완료일</label>
-                        <input type="date" name="deadline" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">예산 범위</label>
-                        <select name="budget" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                            <option value="under_500">500만 원 미만</option>
-                            <option value="500_1000">500만 원 ~ 1,000만 원</option>
-                            <option value="over_1000">1,000만 원 이상</option>
-                        </select>
-                    </div>
+             <div class="step-container" data-step="4">
+                <span class="text-sm font-medium text-indigo-600 mb-2 block">Step 4/4</span>
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">거의 다 되었습니다!</h2>
+                <p class="text-lg text-slate-600 mb-8">
+                    작성해주신 내용을 바탕으로<br>담당자가 24시간 이내에 연락드리겠습니다.
+                </p>
+                <div>
+                    <label for="memo" class="block text-sm font-medium text-slate-700 mb-1">추가 요청사항 (선택)</label>
+                    <textarea id="memo" name="memo" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all bg-white/50 resize-none" placeholder="궁금한 점이 있다면 적어주세요."></textarea>
                 </div>
             </div>
 
-            <div class="form-card p-8">
-                <h2 class="text-xl font-semibold text-indigo-600 mb-6 border-b pb-2">04. 상세 요청사항</h2>
-                <textarea name="additional_info" rows="4" placeholder="참고 사이트 주소나 구체적인 요구사항을 입력해주세요." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+
+            <div class="mt-10 flex justify-between items-center pt-6 border-t border-slate-100">
+                <button type="button" id="prevBtn" class="px-6 py-3 rounded-xl text-slate-600 font-medium hover:bg-slate-100 transition-all hidden">이전</button>
+                
+                <button type="button" id="nextBtn" class="ml-auto px-8 py-3 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 transition-all shadow-lg hover:shadow-indigo-500/30 flex items-center">
+                    <span>다음 단계로</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                </button>
             </div>
 
-            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg transition duration-300 shadow-lg">
-                프로젝트 의뢰 제출하기
-            </button>
         </form>
     </div>
 
     <script>
-        document.getElementById('consultationForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        const WEBHOOK_URL = 'https://recommand.app.n8n.cloud/webhook/377684b2-0e45-45e8-b3ea-19390be60506'; // *** 실제 URL로 교체 필수 ***
 
-            // Webhook URL (이 부분을 실제 URL로 교체하세요)
-            const WEBHOOK_URL = 'https://your-webhook-url.com/api/endpoint';
+        let currentStep = 1;
+        const totalSteps = document.querySelectorAll('.step-container').length;
+        const form = document.getElementById('wizardForm');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const progressBar = document.getElementById('progressBar');
 
-            // Form Data 수집
-            const formData = new FormData(this);
+        // 초기 상태 설정
+        updateUI();
+
+        // 다음 버튼 클릭
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                if (!validateStep(currentStep)) return; // 유효성 검사
+                currentStep++;
+                updateUI();
+            } else {
+                // 마지막 단계에서 제출
+                submitForm();
+            }
+        });
+
+        // 이전 버튼 클릭
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+            }
+        });
+
+        // Enter키로 다음 단계 이동 (편의성)
+        form.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                nextBtn.click();
+            }
+        });
+
+        // UI 업데이트 함수 (단계 전환, 프로그레스바, 버튼 상태)
+        function updateUI() {
+            // 단계 표시
+            document.querySelectorAll('.step-container').forEach(step => {
+                step.classList.toggle('active', parseInt(step.dataset.step) === currentStep);
+            });
+
+            // 프로그레스 바 업데이트
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // 버튼 상태 관리
+            prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+            if (currentStep === totalSteps) {
+                nextBtn.innerHTML = '<span>의뢰서 제출하기</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>';
+                nextBtn.classList.replace('bg-indigo-600', 'bg-green-600');
+                nextBtn.classList.replace('hover:bg-indigo-700', 'hover:bg-green-700');
+            } else {
+                nextBtn.innerHTML = '<span>다음 단계로</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>';
+                 nextBtn.classList.replace('bg-green-600', 'bg-indigo-600');
+                nextBtn.classList.replace('hover:bg-green-700', 'hover:bg-indigo-700');
+            }
+        }
+
+        // 간단한 유효성 검사
+        function validateStep(step) {
+            const currentStepEl = document.querySelector(`.step-container[data-step="${step}"]`);
+            const inputs = currentStepEl.querySelectorAll('input[required], select[required]');
+            let isValid = true;
+            inputs.forEach(input => {
+                if (!input.value) {
+                    isValid = false;
+                    input.classList.add('ring-2', 'ring-red-500'); // 에러 표시
+                } else {
+                    input.classList.remove('ring-2', 'ring-red-500');
+                }
+            });
+            if (!isValid) alert('필수 항목을 입력해주세요.');
+            return isValid;
+        }
+
+        // Webhook 전송 함수
+        async function submitForm() {
+            nextBtn.disabled = true;
+            nextBtn.innerHTML = '<span>제출 중...</span>...';
+
+            const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
 
             try {
+                // 실제로는 주석 해제하고 사용
+                /*
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data),
                 });
+                if (!response.ok) throw new Error('Network response was not ok');
+                */
+               
+                // 성공 시뮬레이션 (2초 후 완료 처리)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                alert('✅ 성공적으로 제출되었습니다! 곧 연락드리겠습니다.');
+                form.reset();
+                currentStep = 1;
+                updateUI();
 
-                if (response.ok) {
-                    alert('성공적으로 제출되었습니다. 곧 연락드리겠습니다!');
-                    this.reset();
-                } else {
-                    alert('제출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-                }
             } catch (error) {
                 console.error('Error:', error);
-                alert('서버 연결에 실패했습니다. (Webhook URL 확인 필요)');
+                alert('❌ 제출 중 오류가 발생했습니다. 관리자에게 문의해주세요.');
+            } finally {
+                nextBtn.disabled = false;
+                updateUI(); // 버튼 텍스트 복구
             }
-        });
+        }
     </script>
 </body>
 </html>
