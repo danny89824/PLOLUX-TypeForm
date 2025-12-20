@@ -60,7 +60,7 @@
             <div id="progressBar" class="h-full bg-blue-600 transition-all duration-500 ease-out" style="width: 0%"></div>
         </div>
 
-        <form id="mainForm" class="flex-1 p-8 md:p-12 flex flex-col justify-center overflow-y-auto no-scrollbar">
+        <form id="mainForm" class="flex-1 p-8 md:p-12 flex flex-col justify-center overflow-y-auto no-scrollbar" novalidate>
 
             <div id="step-intro" class="step-container active text-center">
                 <div class="mb-6">
@@ -361,6 +361,24 @@
         const prevBtn = document.getElementById('prevBtn');
         const submitBtn = document.getElementById('submitBtn');
         const navButtons = document.getElementById('navButtons');
+
+        // ... (기존 submit 이벤트 리스너 코드 끝) ...
+
+        // ✅ [추가] 엔터(Enter)키 입력 시 '다음' 버튼 누르기 (제출 방지)
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                // 1. 텍스트박스(textarea)에서는 줄바꿈을 해야 하므로 제외
+                if (event.target.tagName === 'TEXTAREA') return;
+
+                // 2. 기본 제출 동작(새로고침) 막기
+                event.preventDefault();
+
+                // 3. 마지막 단계가 아니면 '다음' 버튼 클릭 효과
+                if (currentStep < steps.length - 2) { // steps.length - 2 는 마지막 입력 단계(Step 5)를 의미
+                    nextStep();
+                } 
+                // 4. 마지막 단계라면? 사용자가 직접 버튼을 누르게 둠 (실수 방지)
+            }
 
         function updateUI() {
             // Hide all
