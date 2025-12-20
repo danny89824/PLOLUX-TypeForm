@@ -3,549 +3,454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Request | PLORUX</title>
+    <title>웹사이트 제작 의뢰 | Professional Web Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        /* 1. 기본 설정 (Reset & Variables) */
-        :root {
-            --bg-color: #0f1115; /* 다크 백그라운드 */
-            --card-bg: #1c1f26;
-            --text-main: #ffffff;
-            --text-sub: #8b95a5;
-            --accent-color: #3b82f6; /* PLORUX Blue */
-            --accent-hover: #2563eb;
-            --border-color: #2d333b;
-            --success-color: #10b981;
-            --error-color: #ef4444;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Pretendard', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            padding: 20px;
-            line-height: 1.6;
         }
 
-        /* 2. 레이아웃 컨테이너 */
-        .container {
-            width: 100%;
-            max-width: 700px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            position: relative;
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* 3. 헤더 & 프로그레스 바 */
-        .header {
-            padding: 30px 40px;
-            border-bottom: 1px solid var(--border-color);
-            text-align: center;
+        .selection-card:checked + label {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
         }
         
-        .logo {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            color: var(--text-main);
-            margin-bottom: 5px;
-        }
-        .logo span { color: var(--accent-color); }
-        
-        .sub-title { font-size: 14px; color: var(--text-sub); margin-bottom: 20px; }
-
-        .progress-container {
-            width: 100%;
-            background-color: #2d333b;
-            height: 4px;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background-color: var(--accent-color);
-            width: 0%;
-            transition: width 0.4s ease;
-        }
-
-        /* 4. 폼 영역 (Wizard Steps) */
-        .form-body { padding: 40px; }
-        
-        .step { display: none; animation: fadeIn 0.5s ease; }
-        .step.active { display: block; }
-        
-        .step-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        
-        .step-desc {
-            color: var(--text-sub);
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-
-        /* 5. 입력 요소 스타일링 (Card UI) */
-        .input-group { margin-bottom: 25px; }
-        .input-label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 15px; }
-        
-        /* 텍스트 인풋 */
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 15px;
-            background: #14161b;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: white;
-            font-size: 15px;
-            transition: 0.3s;
-        }
-        
-        input[type="text"]:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-        
-        textarea { resize: none; height: 100px; }
-
-        /* 선택형 카드 (Radio/Checkbox) */
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .option-card {
-            position: relative;
-        }
-        
-        .option-card input {
-            position: absolute;
+        .step-container {
+            display: none;
             opacity: 0;
-            cursor: pointer;
+            transition: all 0.5s ease-in-out;
         }
-        
-        .option-content {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background: #14161b;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        .step-container.active {
+            display: block;
+            opacity: 1;
+            animation: fadeInUp 0.6s ease-out forwards;
         }
-        
-        .option-card input:checked + .option-content {
-            border-color: var(--accent-color);
-            background: rgba(59, 130, 246, 0.1);
-        }
-        
-        .option-icon { margin-right: 10px; font-size: 18px; }
-        .option-text { font-size: 14px; font-weight: 500; }
 
-        /* 6. 하단 버튼 영역 */
-        .footer {
-            padding: 20px 40px 40px;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        button {
-            padding: 12px 24px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 15px;
-        }
-        
-        .btn-prev {
-            background: transparent;
-            color: var(--text-sub);
-            border: 1px solid var(--border-color);
-        }
-        
-        .btn-prev:hover { border-color: var(--text-main); color: var(--text-main); }
-        
-        .btn-next {
-            background: var(--accent-color);
-            color: white;
-        }
-        
-        .btn-next:hover { background: var(--accent-hover); }
-        .btn-next:disabled { background: var(--text-sub); cursor: not-allowed; opacity: 0.5; }
-
-        /* 로딩 스피너 */
-        .spinner {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 8px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* 애니메이션 */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 완료 화면 */
-        .success-message {
-            text-align: center;
-            padding: 40px 0;
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
         }
-        .check-icon {
-            font-size: 50px;
-            color: var(--success-color);
-            margin-bottom: 20px;
-        }
-        .error-message {
-            color: var(--error-color);
-            text-align: center;
-            margin-top: 10px;
-            font-size: 14px;
-            display: none;
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
+<body class="flex items-center justify-center p-4">
 
-<div class="container">
-    <div class="header">
-        <div class="logo">PLORUX</div>
-        <div class="sub-title">AI-Driven Web Agency Project Request</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-    </div>
-
-    <form id="wizardForm" class="form-body" onsubmit="return false;">
+    <div class="w-full max-w-3xl bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white/50 relative min-h-[600px] flex flex-col">
         
-        <div class="step active" data-step="1">
-            <div class="step-title">Step 1. 프로젝트의 본질</div>
-            <div class="step-desc">웹사이트를 만드는 가장 중요한 목적을 알려주세요.</div>
-            
-            <div class="input-group">
-                <label class="input-label">주된 목적이 무엇인가요?</label>
-                <div class="options-grid">
-                    <label class="option-card">
-                        <input type="radio" name="goal" value="branding" checked>
-                        <div class="option-content">
-                            <span class="option-icon">🏢</span>
-                            <span class="option-text">기업 브랜딩/신뢰도</span>
+        <div class="absolute top-0 left-0 w-full h-1.5 bg-gray-100">
+            <div id="progressBar" class="h-full bg-blue-600 transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+
+        <form id="mainForm" class="flex-1 p-8 md:p-12 flex flex-col justify-center overflow-y-auto no-scrollbar">
+
+            <div id="step-intro" class="step-container active text-center">
+                <div class="mb-6">
+                    <span class="inline-block p-3 rounded-full bg-blue-100 text-blue-600 mb-4 text-2xl">🚀</span>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-3">성공적인 비즈니스를 위한 첫걸음</h1>
+                    <p class="text-gray-500 leading-relaxed max-w-lg mx-auto">
+                        단순히 예쁜 홈페이지가 아닌,<br>
+                        <strong>매출과 성과를 만드는 웹사이트</strong>를 기획해 드립니다.<br><br>
+                        대표님의 아이디어를 구체화하기 위해 몇 가지 질문을 드립니다.<br>
+                        (소요 시간: 약 3분)
+                    </p>
+                </div>
+                <button type="button" onclick="nextStep()" class="mt-8 px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transform hover:scale-105 transition-all shadow-lg shadow-blue-500/30">
+                    프로젝트 시작하기
+                </button>
+            </div>
+
+            <div id="step-1" class="step-container">
+                <div class="mb-8">
+                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 01</span>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-2">비즈니스 목표 설정 (Why)</h2>
+                    <p class="text-gray-400 text-sm mt-1">고객이 원하는 것은 '홈페이지'가 아니라 '매출(성과)'입니다.</p>
+                </div>
+
+                <div class="space-y-8">
+                    <div class="group">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Q1. 당신의 비즈니스를 한 문장으로 정의한다면?</label>
+                        <input type="text" name="project_definition" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none bg-gray-50/50" placeholder="예: 2030 여성을 위한 다이어트 보조제 판매 사이트" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Q2. 최우선 목표는 무엇인가요? (복수 선택 가능)</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="relative">
+                                <input type="checkbox" id="goal_branding" name="goals" value="브랜딩" class="selection-card hidden">
+                                <label for="goal_branding" class="block w-full p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all text-sm font-medium">✨ 회사/브랜드 신뢰도 상승</label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="goal_leads" name="goals" value="DB확보" class="selection-card hidden">
+                                <label for="goal_leads" class="block w-full p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all text-sm font-medium">📞 잠재 고객 DB 확보</label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="goal_sales" name="goals" value="판매" class="selection-card hidden">
+                                <label for="goal_sales" class="block w-full p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all text-sm font-medium">💰 상품 직접 판매 (커머스)</label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="goal_cs" name="goals" value="CS" class="selection-card hidden">
+                                <label for="goal_cs" class="block w-full p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all text-sm font-medium">💁 기존 고객 응대 및 정보 제공</label>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" id="goal_recruit" name="goals" value="채용" class="selection-card hidden">
+                                <label for="goal_recruit" class="block w-full p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all text-sm font-medium">🤝 인재 채용</label>
+                            </div>
                         </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="radio" name="goal" value="marketing">
-                        <div class="option-content">
-                            <span class="option-icon">📣</span>
-                            <span class="option-text">고객 문의/DB 확보</span>
-                        </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="radio" name="goal" value="commerce">
-                        <div class="option-content">
-                            <span class="option-icon">🛒</span>
-                            <span class="option-text">제품 판매 (커머스)</span>
-                        </div>
-                    </label>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Q3. 경쟁사와 차별화되는 귀사만의 '가장 강력한 무기'는?</label>
+                        <textarea name="usp" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none bg-gray-50/50 resize-none" placeholder="기술력, 가격 경쟁력, 독특한 서비스 등 구체적으로 적어주세요." required></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="input-group">
-                <label class="input-label">핵심 타겟은 누구인가요?</label>
-                <input type="text" name="target_audience" placeholder="예: 3040 전문직 남성, B2B 구매 담당자 등" required>
-            </div>
-             <div class="input-group">
-                <label class="input-label">성공 기준 (KPI)</label>
-                <input type="text" name="kpi" placeholder="예: 월 상담 30건, 회사명 검색 노출" required>
-            </div>
-        </div>
-
-        <div class="step" data-step="2">
-            <div class="step-title">Step 2. 구성과 기능</div>
-            <div class="step-desc">어떤 기능들이 포함되어야 하나요?</div>
-            
-            <div class="input-group">
-                <label class="input-label">필수 기능 (다중 선택)</label>
-                <div class="options-grid">
-                    <label class="option-card">
-                        <input type="checkbox" name="features" value="login">
-                        <div class="option-content">
-                            <span class="option-icon">🔒</span>
-                            <span class="option-text">회원가입/로그인</span>
-                        </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="checkbox" name="features" value="payment">
-                        <div class="option-content">
-                            <span class="option-icon">💳</span>
-                            <span class="option-text">결제 시스템</span>
-                        </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="checkbox" name="features" value="multilingual">
-                        <div class="option-content">
-                            <span class="option-icon">🌍</span>
-                            <span class="option-text">다국어 지원</span>
-                        </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="checkbox" name="features" value="chat">
-                        <div class="option-content">
-                            <span class="option-icon">💬</span>
-                            <span class="option-text">실시간 상담톡</span>
-                        </div>
-                    </label>
+            <div id="step-2" class="step-container">
+                <div class="mb-8">
+                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 02</span>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-2">타겟 고객 정의 (Who)</h2>
+                    <p class="text-gray-400 text-sm mt-1">사장님의 취향이 아닌, 실제 돈을 쓸 고객에게 집중합니다.</p>
                 </div>
-            </div>
-            
-            <div class="input-group">
-                <label class="input-label">메뉴 구성(사이트맵)</label>
-                <input type="text" name="sitemap_status" placeholder="예: 준비된 파일 있음, 혹은 에이전시 제안 필요">
-            </div>
-        </div>
 
-        <div class="step" data-step="3">
-            <div class="step-title">Step 3. 디자인 방향성</div>
-            <div class="step-desc">원하시는 분위기를 시각적으로 말씀해주세요.</div>
-            
-            <div class="input-group">
-                <label class="input-label">선호하는 스타일</label>
-                <div class="options-grid">
-                    <label class="option-card">
-                        <input type="radio" name="design_style" value="simple" checked>
-                        <div class="option-content">
-                            <span class="option-text">✨ 심플 & 미니멀</span>
+                <div class="space-y-8">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Q4. 핵심 방문 고객(페르소나)은 누구인가요?</label>
+                        <textarea name="target_persona" rows="2" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none bg-gray-50/50 resize-none" placeholder="예: 주말마다 골프를 즐기지만 비용이 부담스러운 30대 직장인" required></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Q5. 그 고객은 어떤 이유(고통/결핍)로 당신을 찾나요?</label>
+                        <textarea name="pain_point" rows="2" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none bg-gray-50/50 resize-none" placeholder="고객의 공감을 이끌어낼 문구를 작성해 드립니다." required></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Q6. 방문자가 어떤 행동을 하길 원하시나요? (CTA)</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="relative">
+                                <input type="radio" id="cta_contact" name="cta" value="문의하기" class="selection-card hidden">
+                                <label for="cta_contact" class="block w-full p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all text-sm font-medium">📞 문의/연락 남기기</label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" id="cta_signup" name="cta" value="회원가입" class="selection-card hidden">
+                                <label for="cta_signup" class="block w-full p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all text-sm font-medium">📝 회원 가입 / 구독</label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" id="cta_buy" name="cta" value="구매" class="selection-card hidden">
+                                <label for="cta_buy" class="block w-full p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all text-sm font-medium">💳 상품 결제 / 구매</label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" id="cta_download" name="cta" value="다운로드" class="selection-card hidden">
+                                <label for="cta_download" class="block w-full p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all text-sm font-medium">📂 자료 다운로드</label>
+                            </div>
                         </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="radio" name="design_style" value="trust">
-                        <div class="option-content">
-                            <span class="option-text">🏛️ 신뢰감 & 무게감</span>
-                        </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="radio" name="design_style" value="trendy">
-                        <div class="option-content">
-                            <span class="option-text">⚡ 트렌디 & 힙한</span>
-                        </div>
-                    </label>
+                    </div>
                 </div>
             </div>
 
-            <div class="input-group">
-                <label class="input-label">벤치마킹 사이트 URL</label>
-                <input type="text" name="benchmark_url" placeholder="https://..." required>
-            </div>
-            <div class="input-group">
-                <label class="input-label">어떤 점이 마음에 드셨나요?</label>
-                <textarea name="design_comment" placeholder="예: 메인 배너의 움직임이 좋았습니다. 폰트가 깔끔합니다."></textarea>
-            </div>
-        </div>
+            <div id="step-3" class="step-container">
+                <div class="mb-8">
+                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 03</span>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-2">디자인 & 스타일 (Visual)</h2>
+                    <p class="text-gray-400 text-sm mt-1">말로 하는 설명은 오해를 낳습니다. 눈으로 확인합니다.</p>
+                </div>
 
-        <div class="step" data-step="4">
-            <div class="step-title">Step 4. 운영 및 관리</div>
-            <div class="step-desc">개발 후 직접 관리해야 할 영역을 정합니다.</div>
-            
-            <div class="input-group">
-                <label class="input-label">직접 수정이 필요한 영역</label>
-                <div class="options-grid">
-                    <label class="option-card">
-                        <input type="checkbox" name="admin_scope" value="popup">
-                        <div class="option-content">
-                            <span class="option-text">팝업/배너 관리</span>
+                <div class="space-y-8">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Q7. 벤치마킹 URL (최소 1개)</label>
+                        <textarea name="benchmark_url" rows="2" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none bg-gray-50/50 resize-none" placeholder="https://... (좋다고 느낀 점도 함께 적어주세요)" required></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Q8. 피하고 싶은 디자인이 있나요? (선택)</label>
+                        <input type="text" name="negative_design" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none bg-gray-50/50" placeholder="예: 너무 쨍한 원색은 싫어요.">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Q9. 우리 브랜드의 이미지는? (복수 선택)</label>
+                        <div class="flex flex-wrap gap-2">
+                            <label class="cursor-pointer">
+                                <input type="checkbox" name="brand_image" value="신뢰감" class="peer hidden">
+                                <span class="inline-block px-4 py-2 rounded-full border border-gray-200 text-gray-500 text-sm hover:bg-gray-50 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-all">👔 신뢰감/진중한</span>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="checkbox" name="brand_image" value="활기찬" class="peer hidden">
+                                <span class="inline-block px-4 py-2 rounded-full border border-gray-200 text-gray-500 text-sm hover:bg-gray-50 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-all">⚡ 활기찬/에너지</span>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="checkbox" name="brand_image" value="심플한" class="peer hidden">
+                                <span class="inline-block px-4 py-2 rounded-full border border-gray-200 text-gray-500 text-sm hover:bg-gray-50 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-all">🍃 미니멀/심플</span>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="checkbox" name="brand_image" value="고급스러운" class="peer hidden">
+                                <span class="inline-block px-4 py-2 rounded-full border border-gray-200 text-gray-500 text-sm hover:bg-gray-50 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-all">💎 고급/프리미엄</span>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="checkbox" name="brand_image" value="독특한" class="peer hidden">
+                                <span class="inline-block px-4 py-2 rounded-full border border-gray-200 text-gray-500 text-sm hover:bg-gray-50 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-all">🎨 색다른/특이한</span>
+                            </label>
                         </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="checkbox" name="admin_scope" value="notice">
-                        <div class="option-content">
-                            <span class="option-text">공지사항 게시판</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="step-4" class="step-container">
+                <div class="mb-8">
+                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 04</span>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-2">기능 및 예산 (Scope)</h2>
+                    <p class="text-gray-400 text-sm mt-1">현실적인 제약 사항을 확인하여 최적의 제안을 드립니다.</p>
+                </div>
+
+                <div class="space-y-8">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Q10. 반드시 필요한 핵심 기능 (복수 선택)</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" name="features" value="반응형웹" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                                <span class="text-sm">📱 반응형 웹 (필수)</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" name="features" value="소셜로그인" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                                <span class="text-sm">💬 소셜 로그인</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" name="features" value="예약기능" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                                <span class="text-sm">📅 예약 기능</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" name="features" value="다국어" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                                <span class="text-sm">🌏 다국어 지원</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" name="features" value="관리자페이지" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                                <span class="text-sm">⚙️ 관리자 페이지</span>
+                            </label>
                         </div>
-                    </label>
-                    <label class="option-card">
-                        <input type="checkbox" name="admin_scope" value="recruit">
-                        <div class="option-content">
-                            <span class="option-text">채용 공고</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Q11. 예산 범위 및 희망 일정</label>
+                        <div class="grid grid-cols-2 gap-2 mb-3">
+                            <div class="relative">
+                                <input type="radio" id="budget_30" name="budget" value="30만원이내" class="selection-card hidden">
+                                <label for="budget_30" class="block text-center py-2 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 text-sm">30만원 이내</label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" id="budget_50" name="budget" value="50만원이내" class="selection-card hidden">
+                                <label for="budget_50" class="block text-center py-2 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 text-sm">50만원 이내</label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" id="budget_100" name="budget" value="100만원이내" class="selection-card hidden">
+                                <label for="budget_100" class="block text-center py-2 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 text-sm">100만원 이내</label>
+                            </div>
+                            <div class="relative">
+                                <input type="radio" id="budget_over" name="budget" value="100만원이상" class="selection-card hidden">
+                                <label for="budget_over" class="block text-center py-2 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 text-sm">100만원 이상</label>
+                            </div>
                         </div>
-                    </label>
+                        <input type="text" name="budget_etc" class="w-full px-4 py-2 text-sm rounded-lg border border-gray-200 focus:border-blue-500 outline-none" placeholder="기타 일정이나 예산 관련 메모">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Q12. 추가 요청사항</label>
+                        <textarea name="extra_request" rows="2" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 outline-none resize-none bg-gray-50/50" placeholder="자유롭게 작성해주세요."></textarea>
+                    </div>
                 </div>
             </div>
             
-            <div class="input-group">
-                <label class="input-label">예상 예산 및 일정</label>
-                <input type="text" name="budget_schedule" placeholder="예: 500~1000만원 / 1개월 이내">
-            </div>
-            
-            <div id="errorMsg" class="error-message"></div>
-        </div>
-
-        <div class="step" id="successStep">
-            <div class="success-message">
-                <div class="check-icon">✓</div>
-                <h2>의뢰가 성공적으로 접수되었습니다</h2>
-                <p style="color: var(--text-sub); margin-top: 10px;">
+            <div id="step-outro" class="step-container text-center py-10 hidden">
+                <div class="inline-block p-4 rounded-full bg-green-100 text-green-600 mb-6 text-4xl animate__animated animate__bounceIn">
+                    ✅
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">제출이 완료되었습니다!</h2>
+                <p class="text-gray-600 mb-8 leading-relaxed">
+                    소중한 정보를 남겨주셔서 감사합니다.<br>
                     작성해주신 내용을 바탕으로<br>
-                    PLORUX팀이 <b>'기획 제안서'</b>를 준비하여<br>
-                    빠른 시일 내에 연락드리겠습니다.
+                    <strong>1시간 내로 프로토타입 기획안</strong>을 전달드리겠습니다.
                 </p>
+                <button type="button" onclick="location.reload()" class="text-blue-600 font-medium hover:underline">
+                    처음으로 돌아가기
+                </button>
             </div>
+
+            <div id="navButtons" class="mt-10 flex justify-between items-center border-t border-gray-100 pt-6">
+                <button type="button" onclick="prevStep()" id="prevBtn" class="px-6 py-2.5 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors font-medium hidden">
+                    이전
+                </button>
+                <div class="flex-1"></div> <button type="button" onclick="nextStep()" id="nextBtn" class="px-8 py-3 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all flex items-center gap-2 hidden">
+                    다음 단계 <span class="text-lg">→</span>
+                </button>
+                <button type="submit" id="submitBtn" class="px-8 py-3 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all hidden flex items-center gap-2">
+                    <span id="btnText">기획안 요청하기</span>
+                    <div id="loadingSpinner" class="loader hidden"></div>
+                </button>
+            </div>
+
+        </form>
+        
+        <div class="bg-gray-50 p-4 text-center text-xs text-gray-400 border-t border-gray-100">
+            Powered by AI Web Planner
         </div>
-
-    </form>
-
-    <div class="footer" id="formFooter">
-        <button type="button" class="btn-prev" id="prevBtn" onclick="nextStep(-1)" style="visibility: hidden;">이전</button>
-        <button type="button" class="btn-next" id="nextBtn" onclick="handleNext()">다음</button>
     </div>
-</div>
 
-<script>
-    // --- 설정값 ---
-    const WEBHOOK_URL = "https://recommand.app.n8n.cloud/webhook/1dd838ad-6b05-4a70-a16d-36d360bf3f0f";
-    
-    // --- 상태 변수 ---
-    let currentStep = 1;
-    const totalSteps = 4;
-    let isSubmitting = false;
+    <script>
+        // ✅ 웹훅 URL 설정 (요청하신 URL 적용됨)
+        const WEBHOOK_URL = "https://recommand.app.n8n.cloud/webhook/1dd838ad-6b05-4a70-a16d-36d360bf3f0f";
 
-    // --- UI 업데이트 함수 ---
-    function updateUI() {
-        const steps = document.querySelectorAll('.step');
-        steps.forEach(step => step.classList.remove('active'));
-        
-        // 완료 화면 처리
-        if (currentStep > totalSteps) {
-            document.getElementById('successStep').classList.add('active');
-            document.getElementById('formFooter').style.display = 'none';
-            document.getElementById('progressBar').style.width = '100%';
-            return;
-        }
-
-        // 현재 단계 활성화
-        document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
-
-        // 버튼 상태 관리
+        // Logic
+        let currentStep = 0; // 0: Intro, 1: Step1, 2: Step2, 3: Step3, 4: Step4, 5: Outro
+        const steps = ['step-intro', 'step-1', 'step-2', 'step-3', 'step-4', 'step-outro'];
+        const progressBar = document.getElementById('progressBar');
+        const nextBtn = document.getElementById('nextBtn');
         const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        
-        if (currentStep === 1) {
-            prevBtn.style.visibility = 'hidden';
-        } else {
-            prevBtn.style.visibility = 'visible';
-        }
+        const submitBtn = document.getElementById('submitBtn');
+        const navButtons = document.getElementById('navButtons');
 
-        if (currentStep === totalSteps) {
-            nextBtn.innerText = '제출하기';
-            nextBtn.style.backgroundColor = '#10b981'; // 완료 시 초록색
-        } else {
-            nextBtn.innerText = '다음';
-            nextBtn.style.backgroundColor = ''; // 원래 색 복구
-        }
-
-        // 프로그레스 바 업데이트
-        const progress = ((currentStep - 1) / totalSteps) * 100;
-        document.getElementById('progressBar').style.width = `${progress}%`;
-    }
-
-    // --- '다음' 버튼 클릭 핸들러 ---
-    function handleNext() {
-        if (currentStep === totalSteps) {
-            submitForm(); // 마지막 단계면 제출
-        } else {
-            nextStep(1); // 아니면 다음 단계로
-        }
-    }
-
-    // --- 단계 이동 함수 ---
-    function nextStep(n) {
-        currentStep += n;
-        updateUI();
-    }
-
-    // --- 데이터 전송 함수 (Webhook) ---
-    async function submitForm() {
-        if (isSubmitting) return; // 중복 클릭 방지
-
-        const nextBtn = document.getElementById('nextBtn');
-        const errorMsg = document.getElementById('errorMsg');
-        
-        // 1. UI 상태 변경 (로딩 중)
-        isSubmitting = true;
-        nextBtn.innerHTML = '<span class="spinner"></span>전송 중...';
-        nextBtn.disabled = true;
-        errorMsg.style.display = 'none';
-
-        try {
-            // 2. 폼 데이터 수집
-            const form = document.getElementById('wizardForm');
-            const formData = new FormData(form);
-            const data = {};
-
-            // FormData를 JSON 객체로 변환 (중복된 키는 배열로 처리)
-            for (const [key, value] of formData.entries()) {
-                if (!data[key]) {
-                    data[key] = value;
-                } else {
-                    if (!Array.isArray(data[key])) {
-                        data[key] = [data[key]];
-                    }
-                    data[key].push(value);
-                }
-            }
-            
-            // 메타 데이터 추가 (선택사항)
-            data.submittedAt = new Date().toISOString();
-
-            // 3. n8n 웹훅으로 데이터 전송
-            const response = await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
+        function updateUI() {
+            // Hide all steps
+            steps.forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.remove('active');
+                setTimeout(() => {
+                    if(!el.classList.contains('active')) el.style.display = 'none';
+                }, 500); // Animation duration sync
             });
 
-            if (response.ok) {
-                // 성공 시 완료 화면으로 이동
+            // Show current step
+            const currentEl = document.getElementById(steps[currentStep]);
+            currentEl.style.display = 'block';
+            setTimeout(() => currentEl.classList.add('active'), 50);
+
+            // Progress Bar
+            let progress = 0;
+            if (currentStep > 0 && currentStep < 5) {
+                progress = (currentStep / 4) * 100;
+            }
+            progressBar.style.width = `${progress}%`;
+
+            // Buttons Visibility
+            if (currentStep === 0) {
+                navButtons.style.display = 'none';
+            } else if (currentStep === 5) {
+                navButtons.style.display = 'none';
+                progressBar.parentElement.style.display = 'none';
+            } else {
+                navButtons.style.display = 'flex';
+                prevBtn.classList.remove('hidden');
+                
+                if (currentStep === 4) {
+                    nextBtn.classList.add('hidden');
+                    submitBtn.classList.remove('hidden');
+                } else {
+                    nextBtn.classList.remove('hidden');
+                    submitBtn.classList.add('hidden');
+                }
+            }
+        }
+
+        function validateStep() {
+            if (currentStep === 0) return true;
+            
+            const currentEl = document.getElementById(steps[currentStep]);
+            const requiredInputs = currentEl.querySelectorAll('input[required], textarea[required]');
+            
+            for (let input of requiredInputs) {
+                if (!input.value.trim()) {
+                    alert('필수 항목을 입력해주세요 🥺');
+                    input.focus();
+                    input.classList.add('ring-2', 'ring-red-500');
+                    setTimeout(() => input.classList.remove('ring-2', 'ring-red-500'), 2000);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function nextStep() {
+            if (validateStep()) {
                 currentStep++;
                 updateUI();
-            } else {
-                throw new Error('서버 응답 오류');
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateUI();
+            }
+        }
+
+        // ✅ 전송 로직 (Webhook Data Sending)
+        document.getElementById('mainForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('loadingSpinner');
+            
+            submitBtn.disabled = true;
+            btnText.textContent = "전송 중...";
+            spinner.classList.remove('hidden');
+
+            // 폼 데이터 수집
+            const formData = new FormData(e.target);
+            const data = {};
+            
+            // 체크박스(복수 선택) 배열 처리
+            const arrayFields = ['goals', 'brand_image', 'features'];
+            
+            for (let [key, value] of formData.entries()) {
+                if (arrayFields.includes(key)) {
+                    if (!data[key]) data[key] = [];
+                    data[key].push(value);
+                } else {
+                    data[key] = value;
+                }
             }
 
-        } catch (error) {
-            console.error('Submission Error:', error);
-            errorMsg.innerText = "전송에 실패했습니다. 잠시 후 다시 시도해주세요.";
-            errorMsg.style.display = 'block';
-            
-            // 버튼 상태 복구
-            nextBtn.innerText = '제출하기';
-            nextBtn.disabled = false;
-        } finally {
-            isSubmitting = false;
-        }
-    }
+            try {
+                // n8n 웹훅으로 데이터 POST 전송
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
 
-    // 초기 실행
-    updateUI();
-</script>
+                if (response.ok) {
+                    currentStep = 5; // 성공 시 Outro 화면으로 이동
+                    updateUI();
+                } else {
+                    throw new Error('Server Error');
+                }
+            } catch (error) {
+                alert('전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+                console.error(error);
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = "기획안 요청하기";
+                spinner.classList.add('hidden');
+            }
+        });
 
+        // Initialize
+        updateUI();
+    </script>
 </body>
 </html>
