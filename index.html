@@ -78,9 +78,41 @@
                 </button>
             </div>
 
-            <div id="step-1" class="step-container">
+            <div id="step-basic" class="step-container">
                 <div class="mb-8">
                     <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 01</span>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-2">고객 기본 정보</h2>
+                    <p class="text-gray-400 text-sm mt-1">원활한 소통을 위해 담당자 정보를 입력해 주세요.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">담당자 성함 <span class="text-red-500">*</span></label>
+                            <input type="text" name="client_name" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none bg-gray-50/50" placeholder="홍길동" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">회사명 (선택)</label>
+                            <input type="text" name="company_name" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none bg-gray-50/50" placeholder="(주)OOO">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">연락처 <span class="text-red-500">*</span></label>
+                            <input type="tel" name="client_contact" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none bg-gray-50/50" placeholder="010-0000-0000" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">이메일 <span class="text-red-500">*</span></label>
+                            <input type="email" name="client_email" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none bg-gray-50/50" placeholder="example@email.com" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="step-business" class="step-container">
+                <div class="mb-8">
+                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 02</span>
                     <h2 class="text-2xl font-bold text-gray-900 mt-2">비즈니스 목표 설정 (Why)</h2>
                     <p class="text-gray-400 text-sm mt-1">고객이 원하는 것은 '홈페이지'가 아니라 '매출(성과)'입니다.</p>
                 </div>
@@ -124,9 +156,9 @@
                 </div>
             </div>
 
-            <div id="step-2" class="step-container">
+            <div id="step-target" class="step-container">
                 <div class="mb-8">
-                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 02</span>
+                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 03</span>
                     <h2 class="text-2xl font-bold text-gray-900 mt-2">타겟 고객 정의 (Who)</h2>
                     <p class="text-gray-400 text-sm mt-1">사장님의 취향이 아닌, 실제 돈을 쓸 고객에게 집중합니다.</p>
                 </div>
@@ -166,17 +198,22 @@
                 </div>
             </div>
 
-            <div id="step-3" class="step-container">
+            <div id="step-visual" class="step-container">
                 <div class="mb-8">
-                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 03</span>
+                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 04</span>
                     <h2 class="text-2xl font-bold text-gray-900 mt-2">디자인 & 스타일 (Visual)</h2>
                     <p class="text-gray-400 text-sm mt-1">말로 하는 설명은 오해를 낳습니다. 눈으로 확인합니다.</p>
                 </div>
 
                 <div class="space-y-8">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Q7. 벤치마킹 URL (최소 1개)</label>
-                        <textarea name="benchmark_url" rows="2" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none bg-gray-50/50 resize-none" placeholder="https://... (좋다고 느낀 점도 함께 적어주세요)" required></textarea>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Q7. 벤치마킹 사이트 URL (최소 1개)</label>
+                        <input type="url" name="benchmark_url" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none bg-gray-50/50" placeholder="https://..." required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Q7-1. 위 사이트에서 좋다고 느낀 점은?</label>
+                        <textarea name="benchmark_reason" rows="2" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none bg-gray-50/50 resize-none" placeholder="예: 메뉴 구성이 직관적이다, 컬러감이 좋다, 폰트가 깔끔하다." required></textarea>
                     </div>
 
                     <div>
@@ -212,9 +249,9 @@
                 </div>
             </div>
 
-            <div id="step-4" class="step-container">
+            <div id="step-scope" class="step-container">
                 <div class="mb-8">
-                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 04</span>
+                    <span class="text-blue-600 font-bold text-sm tracking-wider uppercase">Step 05</span>
                     <h2 class="text-2xl font-bold text-gray-900 mt-2">기능 및 예산 (Scope)</h2>
                     <p class="text-gray-400 text-sm mt-1">현실적인 제약 사항을 확인하여 최적의 제안을 드립니다.</p>
                 </div>
@@ -312,12 +349,13 @@
     </div>
 
     <script>
-        // ✅ 웹훅 URL 설정 (요청하신 URL 적용됨)
-        const WEBHOOK_URL = "https://recommand.app.n8n.cloud/webhook/89663915-2c87-41d0-9054-93c6cc9f5189";
+        // ✅ 웹훅 URL
+        const WEBHOOK_URL = "https://recommand.app.n8n.cloud/webhook/1dd838ad-6b05-4a70-a16d-36d360bf3f0f";
 
         // Logic
-        let currentStep = 0; // 0: Intro, 1: Step1, 2: Step2, 3: Step3, 4: Step4, 5: Outro
-        const steps = ['step-intro', 'step-1', 'step-2', 'step-3', 'step-4', 'step-outro'];
+        let currentStep = 0; 
+        const steps = ['step-intro', 'step-basic', 'step-business', 'step-target', 'step-visual', 'step-scope', 'step-outro'];
+        
         const progressBar = document.getElementById('progressBar');
         const nextBtn = document.getElementById('nextBtn');
         const prevBtn = document.getElementById('prevBtn');
@@ -325,38 +363,38 @@
         const navButtons = document.getElementById('navButtons');
 
         function updateUI() {
-            // Hide all steps
+            // Hide all
             steps.forEach(id => {
                 const el = document.getElementById(id);
                 el.classList.remove('active');
                 setTimeout(() => {
                     if(!el.classList.contains('active')) el.style.display = 'none';
-                }, 500); // Animation duration sync
+                }, 500); 
             });
 
-            // Show current step
+            // Show current
             const currentEl = document.getElementById(steps[currentStep]);
             currentEl.style.display = 'block';
             setTimeout(() => currentEl.classList.add('active'), 50);
 
-            // Progress Bar
+            // Progress Bar (Total 5 actual steps: basic, business, target, visual, scope)
             let progress = 0;
-            if (currentStep > 0 && currentStep < 5) {
-                progress = (currentStep / 4) * 100;
+            if (currentStep > 0 && currentStep < steps.length - 1) {
+                progress = (currentStep / (steps.length - 2)) * 100;
             }
             progressBar.style.width = `${progress}%`;
 
-            // Buttons Visibility
+            // Buttons
             if (currentStep === 0) {
                 navButtons.style.display = 'none';
-            } else if (currentStep === 5) {
+            } else if (currentStep === steps.length - 1) {
                 navButtons.style.display = 'none';
                 progressBar.parentElement.style.display = 'none';
             } else {
                 navButtons.style.display = 'flex';
                 prevBtn.classList.remove('hidden');
                 
-                if (currentStep === 4) {
+                if (currentStep === steps.length - 2) {
                     nextBtn.classList.add('hidden');
                     submitBtn.classList.remove('hidden');
                 } else {
@@ -380,6 +418,12 @@
                     setTimeout(() => input.classList.remove('ring-2', 'ring-red-500'), 2000);
                     return false;
                 }
+                // 이메일 형식 체크
+                if (input.type === 'email' && !input.value.includes('@')) {
+                    alert('올바른 이메일 주소를 입력해주세요.');
+                    input.focus();
+                    return false;
+                }
             }
             return true;
         }
@@ -398,7 +442,6 @@
             }
         }
 
-        // ✅ 전송 로직 (Webhook Data Sending)
         document.getElementById('mainForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -409,11 +452,9 @@
             btnText.textContent = "전송 중...";
             spinner.classList.remove('hidden');
 
-            // 폼 데이터 수집
             const formData = new FormData(e.target);
             const data = {};
             
-            // 체크박스(복수 선택) 배열 처리
             const arrayFields = ['goals', 'brand_image', 'features'];
             
             for (let [key, value] of formData.entries()) {
@@ -426,7 +467,6 @@
             }
 
             try {
-                // n8n 웹훅으로 데이터 POST 전송
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -434,13 +474,13 @@
                 });
 
                 if (response.ok) {
-                    currentStep = 5; // 성공 시 Outro 화면으로 이동
+                    currentStep = steps.length - 1; // Outro
                     updateUI();
                 } else {
                     throw new Error('Server Error');
                 }
             } catch (error) {
-                alert('전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+                alert('전송에 실패했습니다. 다시 시도해주세요.');
                 console.error(error);
             } finally {
                 submitBtn.disabled = false;
@@ -449,7 +489,6 @@
             }
         });
 
-        // Initialize
         updateUI();
     </script>
 </body>
